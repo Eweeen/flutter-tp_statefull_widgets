@@ -20,39 +20,41 @@ class MyApp extends StatelessWidget {
             title: Text('Flutter Demo'),
           ),
           body: Center(
-            child: DynamicChecklist(),
+            child: AnimatedProgressBar(),
           ),
         ));
   }
 }
 
-class DynamicChecklist extends StatefulWidget {
+class AnimatedProgressBar extends StatefulWidget {
+  const AnimatedProgressBar({super.key});
+
   @override
-  _DynamicChecklistState createState() => _DynamicChecklistState();
+  State<AnimatedProgressBar> createState() => _AnimatedProgressBarState();
 }
 
-class _DynamicChecklistState extends State<DynamicChecklist> {
-  List<Map<String, bool>> items = [
-    {"Pain": false},
-    {"Lait": false},
-    {"Café": false},
-  ];
+class _AnimatedProgressBarState extends State<AnimatedProgressBar> {
+  double _progress = 0;
+
+  void _animateProgressBar() async {
+    while (_progress < 1) {
+      await Future.delayed(Duration(milliseconds: 100));
+      setState(() {
+        _progress += 0.05;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return CheckboxListTile(
-          title: Text(items[index].keys.first),
-          value: items[index].values.first,
-          onChanged: (bool? newValue) {
-            setState(() {
-              items[index][items[index].keys.first] = newValue!;
-            });
-          },
-        );
-      },
+    return Column(
+      children: [
+        LinearProgressIndicator(value: _progress),
+        ElevatedButton(
+          onPressed: _animateProgressBar,
+          child: Text("Démarrer l'animation"),
+        )
+      ],
     );
   }
 }
