@@ -20,36 +20,39 @@ class MyApp extends StatelessWidget {
             title: Text('Flutter Demo'),
           ),
           body: Center(
-            child: InteractiveSlider(),
+            child: DynamicChecklist(),
           ),
         ));
   }
 }
 
-class InteractiveSlider extends StatefulWidget {
+class DynamicChecklist extends StatefulWidget {
   @override
-  _InteractiveSliderState createState() => _InteractiveSliderState();
+  _DynamicChecklistState createState() => _DynamicChecklistState();
 }
 
-class _InteractiveSliderState extends State<InteractiveSlider> {
-  double _currentValue = 0;
+class _DynamicChecklistState extends State<DynamicChecklist> {
+  List<Map<String, bool>> items = [
+    {"Pain": false},
+    {"Lait": false},
+    {"Café": false},
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Slider(
-          value: _currentValue,
-          onChanged: (newValue) {
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        return CheckboxListTile(
+          title: Text(items[index].keys.first),
+          value: items[index].values.first,
+          onChanged: (bool? newValue) {
             setState(() {
-              _currentValue = newValue;
+              items[index][items[index].keys.first] = newValue!;
             });
           },
-          min: 0,
-          max: 100,
-        ),
-        Text('Valeur actuelle: ${_currentValue.toStringAsFixed(2)}')
-      ],
+        );
+      },
     );
   }
 }
