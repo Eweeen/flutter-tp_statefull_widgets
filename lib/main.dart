@@ -20,66 +20,36 @@ class MyApp extends StatelessWidget {
             title: Text('Flutter Demo'),
           ),
           body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Counter(),
-                SizedBox(height: 20),
-                ToggleButton(),
-              ],
-            ),
+            child: InteractiveSlider(),
           ),
         ));
   }
 }
 
-class Counter extends StatefulWidget {
+class InteractiveSlider extends StatefulWidget {
   @override
-  _CounterState createState() => _CounterState();
+  _InteractiveSliderState createState() => _InteractiveSliderState();
 }
 
-class _CounterState extends State<Counter> {
-  int _count = 0;
+class _InteractiveSliderState extends State<InteractiveSlider> {
+  double _currentValue = 0;
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Compte actuel: $_count', style: TextStyle(fontSize: 24)),
-        ElevatedButton(
-          onPressed: () {
+        Slider(
+          value: _currentValue,
+          onChanged: (newValue) {
             setState(() {
-              _count++;
+              _currentValue = newValue;
             });
           },
-          child: Text('Ajouter +1'),
+          min: 0,
+          max: 100,
         ),
+        Text('Valeur actuelle: ${_currentValue.toStringAsFixed(2)}')
       ],
-    );
-  }
-}
-
-class ToggleButton extends StatefulWidget {
-  @override
-  _ToggleButtonState createState() => _ToggleButtonState();
-}
-
-class _ToggleButtonState extends State<ToggleButton> {
-  bool _isActive = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: _isActive ? Colors.green : Colors.red,
-      ),
-      onPressed: () {
-        setState(() {
-          _isActive = !_isActive;
-        });
-      },
-      child: Text(_isActive ? 'Activé' : 'Désactivé'),
     );
   }
 }
